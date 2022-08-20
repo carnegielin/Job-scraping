@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Scraping</title>
+    <link rel="icon" href="{% static 'images/icon.png' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+</head>
+<body>
+    <!-- Title -->
+    <h1>Job Scrape</h1>
+    <!-- Form -->
+    <form class="container" method="POST"> 
+        {% csrf_token %}  
+        <div class="relative">
+            <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+            <input type="search" name="input_search" id="default-search" class="block p-4 pl-10 w-4/5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search" required>
+            <button type="submit" class="text-white absolute right-80 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
+        </div>
+    </form>
+    <!-- Table -->
+    <div class="container">
+        <table class="w-full flex flex-row flex-no-wrap sm:bg-white rounded-lg overflow-hidden sm:shadow-lg my-5">
+        <thead class="text-black">
+            <tr class="bg-blue-400 flex flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none mb-2 sm:mb-0">
+                <th class="p-3 text-center">Job Title</th>
+                <th class="p-3 text-center">Company Name</th>
+                <th class="p-3 text-center">Address</th>
+                <th class="p-3 text-center">Degree</th>
+                <th class="p-3 text-center">Experience</th>
+                <th class="p-3 text-center">Industry</th>
+                <th class="p-3 text-center">Detail Link</th>
+                <th class="p-2 text-center">Source Website</th>
+            </tr>
+        </thead>
+        {% if jobs %}
+            {% for job in jobs %}
+        <tbody class="flex-1 sm:flex-none">
+            <tr class="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0">
+                <td class="border-grey-light text-green-600 border hover:bg-gray-200 p-3 text-center">{{job.job_title}}</td>
+                <td class="border-grey-light text-green-600 border hover:bg-gray-200 p-3 text-center">{{job.company_name}}</td>
+                <td class="border-grey-light text-green-600 border hover:bg-gray-200 p-3 text-center">{{job.work_address}}</td>
+                <td class="border-grey-light text-green-600 border hover:bg-gray-200 p-3 text-center">{{job.degree}}</td>
+                <td class="border-grey-light text-green-600 border hover:bg-gray-200 p-3 text-center">{{job.experience}}</td>
+                <td class="border-grey-light text-green-600 border hover:bg-gray-200 p-3 text-center">{{job.industry}}</td>
+                {% if '104' in job.detail_link %}
+                    <td class="border-grey-light border hover:bg-gray-100 p-3 text-blue-400 hover:text-red-600 hover:font-medium cursor-pointer text-center"><a href="https://{{job.detail_link}}">Detail_Link</a></td> 
+                    <td class="border-grey-light border hover:bg-gray-100 p-2 hover:font-medium cursor-pointer self-center"><a href="https://www.104.com.tw/"><img src="{% static 'images/104.png' %}"></a></td> 
+                {% else %} 
+                    <td class="border-grey-light border hover:bg-gray-100 p-3 text-blue-400 hover:text-red-600 hover:font-medium cursor-pointer text-center"><a href="{{job.detail_link}}">Detail_Link</a></td>
+                    <td class="border-grey-light border hover:bg-gray-100 p-2 hover:font-medium cursor-pointer self-center"><a href="https://www.1111.com.tw/"><img src="{% static 'images/1111.png' %}"></a></td> 
+                {% endif %}
+                </tr>
+        </tbody>
+            {% endfor %}
+        {% else %}
+            Can't find any Jobs, you should change the keyword.
+        {% endif %}
+        </table>
+    </div>
+    
+    <!-- <img src="{% static 'images/104.png' %}" alt="">
+    <img src="{% static 'images/1111.png' %}" alt=""> -->
+</body>
+</html>
